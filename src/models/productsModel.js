@@ -96,7 +96,28 @@ export const Products = {
 			);
 			return { _id, query };
 		} catch (error) {
-			console.log(`Error trying to create ${obj.title} in database.`);
+			console.log(`Error trying to push ${obj.title} in database.`);
+			console.log(`Operation returned: ${error}`);
+			return false;
+		}
+	},
+	updateProduct: async function (obj) {
+		try {
+			console.log(obj);
+			return await products.updateOne(
+				{ "products._id": ObjectId(obj.id) },
+				{
+					$set: {
+						"products.$.title": obj.title,
+						"products.$.img": obj.img,
+						"products.$.description": obj.description,
+						"products.$.price": obj.price,
+						"products.$.inStock": obj.inStock,
+					},
+				}
+			);
+		} catch (error) {
+			console.log(`Error trying to update ${obj.id} in database.`);
 			console.log(`Operation returned: ${error}`);
 			return false;
 		}
