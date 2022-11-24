@@ -29,3 +29,12 @@ export async function getProducts(req, res) {
 	}
 	res.status(200).send(query);
 }
+
+export async function putProducts(req, res) {
+	const id = req.params.id;
+	const query = Products.updateProduct({ id, ...req.body });
+	if (!query) {
+		return res.sendStatus(500);
+	}
+	res.sendStatus(200);
+}
