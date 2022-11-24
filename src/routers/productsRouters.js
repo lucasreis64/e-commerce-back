@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+	deleteProducts,
 	getProducts,
 	postProducts,
 	putProducts,
@@ -14,5 +15,6 @@ const router = Router();
 router.post("/products", checkIfEmpty, validadeProduct, postProducts);
 router.get("/products", getProducts);
 router.put("/products/:id", putProducts);
+router.delete("/products/:id", deleteProducts);
 
 export default router;
