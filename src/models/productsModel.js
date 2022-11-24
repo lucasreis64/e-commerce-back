@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { ObjectId } from "mongodb";
-import { products } from "../database/mongoDB";
+import { products } from "../database/mongoDB.js";
 
 export const Products = {
 	findProduct: async function (obj) {
@@ -26,7 +26,7 @@ export const Products = {
 	},
 	findAllProducts: async function (obj) {
 		try {
-			return await products.findMany({});
+			return await products.find({}).toArray();
 		} catch (error) {
 			console.log(`Error trying to find all products in database.`);
 			console.log(`Operation returned: ${error}`);
@@ -37,11 +37,12 @@ export const Products = {
 		try {
 			const query = await this.findProductsByCategory(obj);
 			if (!query) {
-				return await products.insertOne({
+				const _id = new ObjectId();
+				const query = await products.insertOne({
 					category: obj.category,
 					products: [
 						{
-							_id: new ObjectId(),
+							_id,
 							title: obj.title,
 							img: obj.img,
 							description: obj.description,
@@ -52,6 +53,7 @@ export const Products = {
 						},
 					],
 				});
+				return { _id, query };
 			}
 			return this.pushProduct(obj);
 		} catch (error) {
