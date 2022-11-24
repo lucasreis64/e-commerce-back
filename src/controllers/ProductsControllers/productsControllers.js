@@ -20,7 +20,7 @@ export async function getProducts(req, res) {
 	if (id) {
 		const queryById = await Products.findProductById({ id });
 		if (queryById.length === 0)
-			return res.status(500).send(`id: ${id} doesn't exist in database`);
+			return res.status(500).send(`id:${id} doesn't exist in database`);
 		const objProduct = queryById[0].products[0];
 		return res.status(200).send(objProduct);
 	}
@@ -34,6 +34,15 @@ export async function getProducts(req, res) {
 export async function putProducts(req, res) {
 	const id = req.params.id;
 	const query = Products.updateProduct({ id, ...req.body });
+	if (!query) {
+		return res.sendStatus(500);
+	}
+	res.sendStatus(200);
+}
+
+export async function deleteProducts(req, res) {
+	const id = req.params.id;
+	const query = Products.deleteProduct({ id });
 	if (!query) {
 		return res.sendStatus(500);
 	}
