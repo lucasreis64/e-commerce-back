@@ -1,7 +1,7 @@
 import { Products } from "../../models/productsModel.js";
 
 export async function postProducts(req, res) {
-	const { _id, query } = await Products.createProduct(req.body);
+	const { _id, query } = await Products.createProduct(req.product);
 	if (!query.acknowledged) {
 		return res.sendStatus(500);
 	}
