@@ -3,14 +3,26 @@ import { ObjectId } from "mongodb";
 import { products } from "../database/mongoDB.js";
 
 export const Products = {
-	findProduct: async function (obj) {
+	findProductById: async function (obj) {
 		try {
-			return await products.findOne({
-				category: obj.category,
-				"products._id": ObjectId(obj._id),
-			});
+			return await products
+				.aggregate([
+					{ $match: { "products._id": ObjectId(obj.id) } },
+					{
+						$project: {
+							products: {
+								$filter: {
+									input: "$products",
+									as: "product",
+									cond: { $eq: ["$$product._id", ObjectId(obj.id)] },
+								},
+							},
+						},
+					},
+				])
+				.toArray();
 		} catch (error) {
-			console.log(`Error trying to find ${obj._id} in database.`);
+			console.log(`Error trying to find ${obj.id} in database.`);
 			console.log(`Operation returned: ${error}`);
 			return false;
 		}
