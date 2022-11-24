@@ -117,7 +117,21 @@ export const Products = {
 				}
 			);
 		} catch (error) {
-			console.log(`Error trying to update ${obj.id} in database.`);
+			console.log(`Error trying to update ${obj.title} in database.`);
+			console.log(`Operation returned: ${error}`);
+			return false;
+		}
+	},
+	deleteProduct: async function (obj) {
+		try {
+			return await products.updateOne(
+				{ "products._id": ObjectId(obj.id) },
+				{
+					$pull: { products: { _id: ObjectId(obj.id) } },
+				}
+			);
+		} catch (error) {
+			console.log(`Error trying to delete ${obj.id} in database.`);
 			console.log(`Operation returned: ${error}`);
 			return false;
 		}
