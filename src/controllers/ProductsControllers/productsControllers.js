@@ -5,7 +5,7 @@ export async function postProducts(req, res) {
 	if (!query.acknowledged) {
 		return res.sendStatus(500);
 	}
-	res.status(201).send(_id);
+	res.status(201).send({ id: _id });
 }
 
 export async function getProducts(req, res) {
@@ -20,7 +20,8 @@ export async function getProducts(req, res) {
 	if (id) {
 		const queryById = await Products.findProductById({ id, category });
 		if (!queryById) return res.sendStatus(500);
-		return res.status(200).send(queryById);
+		const objProduct = queryById[0].products[0];
+		return res.status(200).send(objProduct);
 	}
 	const query = await Products.findAllProducts();
 	if (!query) {
