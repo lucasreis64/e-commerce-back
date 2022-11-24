@@ -11,7 +11,7 @@ try {
 	console.error(error);
 }
 
-export const db = mongoClient.db("mywallet-api");
+export const db = mongoClient.db("eCommerce-API");
 export const accounts = db.collection("accounts");
 export const sessions = db.collection("sessions");
 export const products = db.collection("products");
