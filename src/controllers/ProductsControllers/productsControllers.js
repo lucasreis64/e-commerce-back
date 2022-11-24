@@ -18,8 +18,9 @@ export async function getProducts(req, res) {
 		return res.status(200).send(queryByCategory);
 	}
 	if (id) {
-		const queryById = await Products.findProductById({ id, category });
-		if (!queryById) return res.sendStatus(500);
+		const queryById = await Products.findProductById({ id });
+		if (queryById.length === 0)
+			return res.status(500).send(`id: ${id} doesn't exist in database`);
 		const objProduct = queryById[0].products[0];
 		return res.status(200).send(objProduct);
 	}
