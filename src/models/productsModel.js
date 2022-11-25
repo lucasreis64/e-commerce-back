@@ -3,14 +3,26 @@ import { ObjectId } from "mongodb";
 import { products } from "../database/mongoDB.js";
 
 export const Products = {
-	findProduct: async function (obj) {
+	findProductById: async function (obj) {
 		try {
-			return await products.findOne({
-				category: obj.category,
-				"products._id": ObjectId(obj._id),
-			});
+			return await products
+				.aggregate([
+					{ $match: { "products._id": ObjectId(obj.id) } },
+					{
+						$project: {
+							products: {
+								$filter: {
+									input: "$products",
+									as: "product",
+									cond: { $eq: ["$$product._id", ObjectId(obj.id)] },
+								},
+							},
+						},
+					},
+				])
+				.toArray();
 		} catch (error) {
-			console.log(`Error trying to find ${obj._id} in database.`);
+			console.log(`Error trying to find ${obj.id} in database.`);
 			console.log(`Operation returned: ${error}`);
 			return false;
 		}
@@ -84,7 +96,42 @@ export const Products = {
 			);
 			return { _id, query };
 		} catch (error) {
-			console.log(`Error trying to create ${obj.title} in database.`);
+			console.log(`Error trying to push ${obj.title} in database.`);
+			console.log(`Operation returned: ${error}`);
+			return false;
+		}
+	},
+	updateProduct: async function (obj) {
+		try {
+			console.log(obj);
+			return await products.updateOne(
+				{ "products._id": ObjectId(obj.id) },
+				{
+					$set: {
+						"products.$.title": obj.title,
+						"products.$.img": obj.img,
+						"products.$.description": obj.description,
+						"products.$.price": obj.price,
+						"products.$.inStock": obj.inStock,
+					},
+				}
+			);
+		} catch (error) {
+			console.log(`Error trying to update ${obj.title} in database.`);
+			console.log(`Operation returned: ${error}`);
+			return false;
+		}
+	},
+	deleteProduct: async function (obj) {
+		try {
+			return await products.updateOne(
+				{ "products._id": ObjectId(obj.id) },
+				{
+					$pull: { products: { _id: ObjectId(obj.id) } },
+				}
+			);
+		} catch (error) {
+			console.log(`Error trying to delete ${obj.id} in database.`);
 			console.log(`Operation returned: ${error}`);
 			return false;
 		}
