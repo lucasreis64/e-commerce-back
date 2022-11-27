@@ -9,13 +9,14 @@ export async function postSignUp(req, res) {
     try {
         if (!validateBySchema(newUser, res, signUpSchema)) return;
         const isExistent = await accounts.findOne({ email: newUser.email });
+
         if (isExistent) {
             return res.status(409).send("this email adress is already in use!");
         }
 
         delete newUser.repeatPassword;
 
-        newUser.statement = [];
+        newUser.cart = [];
 
         const passwordHash = bcrypt.hashSync(newUser.password, 10);
 

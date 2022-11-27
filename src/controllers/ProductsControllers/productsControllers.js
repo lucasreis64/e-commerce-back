@@ -1,4 +1,4 @@
-import { Products } from "../../models/productsModel.js";
+import { Products } from "../../database/productsConnectionDB.js";
 
 export async function postProducts(req, res) {
 	const { _id, query } = await Products.createProduct(req.product);
