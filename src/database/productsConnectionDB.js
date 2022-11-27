@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { ObjectId } from "mongodb";
-import { products } from "../database/mongoDB.js";
+import { products } from "./mongoDB.js";
 
 export const Products = {
 	findProductById: async function (obj) {
