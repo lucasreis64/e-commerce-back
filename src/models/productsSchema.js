@@ -10,7 +10,7 @@ export const productsSchema = Joi.object({
 		.uri()
 >>>>>>> 7d68442 (feat: img by url, change max length)
 		.required(),
-	description: Joi.string().max(120).min(20).required(),
+	description: Joi.string().max(60).min(20).required(),
 	price: Joi.number().required(),
 	inStock: Joi.number().min(1).required(),
 });
