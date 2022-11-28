@@ -5,7 +5,7 @@ import { accounts } from "./mongoDB.js";
 export const Cart = {
     findCartProducts: async function (_id) {
         try {
-            const account = await accounts.findOne({_id})
+            const account = await accounts.findOne({ _id });
             return account.cart;
         } catch (error) {
             console.log(`Error trying to find user ${_id} cart in database.`);
@@ -15,7 +15,6 @@ export const Cart = {
     },
     pushCartProduct: async function (obj, _id) {
         try {
-            
             const query = await accounts.updateOne(
                 { _id: _id },
                 {
@@ -25,7 +24,7 @@ export const Cart = {
                             title: obj.title,
                             img: obj.img,
                             price: Number(obj.price).toFixed(2),
-							amount: obj.amount,
+                            amount: obj.amount,
                         },
                     },
                 }
@@ -43,7 +42,7 @@ export const Cart = {
                 { "cart._id": ObjectId(obj.id) },
                 {
                     $set: {
-                        "cart.$.amount": obj.amount
+                        "cart.$.amount": obj.amount,
                     },
                 }
             );
@@ -63,6 +62,15 @@ export const Cart = {
             );
         } catch (error) {
             console.log(`Error trying to delete ${obj.id} in database.`);
+            console.log(`Operation returned: ${error}`);
+            return false;
+        }
+    },
+    deleteCart: async function () {
+        try {
+            return await accounts.updateMany({}, { $unset: { cart: "" } });
+        } catch (error) {
+            console.log(`Error trying to delete cart in database.`);
             console.log(`Operation returned: ${error}`);
             return false;
         }
