@@ -1,5 +1,4 @@
 import { Cart } from "../../database/cartConnectionDB.js";
-import { Products } from "../../database/productsConnectionDB.js";
 import { validateBySchema } from "../../middlewares/validateBySchema.js";
 import { ammountSchema, cartSchema } from "../../models/cartSchema.js";
 
