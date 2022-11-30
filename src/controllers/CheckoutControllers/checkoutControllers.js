@@ -6,7 +6,7 @@ import { cartSchema } from "../../models/cartSchema.js";
 
 export async function postCheckout(req, res) {
     const { _id } = res.locals.account;
-
+    
     const id = await checkOut.pushCheckoutProducts(req.body, _id);
 
     await Cart.deleteCart()
